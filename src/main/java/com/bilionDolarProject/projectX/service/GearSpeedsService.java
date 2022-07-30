@@ -1,8 +1,5 @@
 package com.bilionDolarProject.projectX.service;
 
-import com.bilionDolarProject.projectX.GearRatioCalculator;
-import com.bilionDolarProject.projectX.WheelSizeCalculator;
-import com.bilionDolarProject.projectX.WheelSpeedsCalculator;
 import com.bilionDolarProject.projectX.controller.GearsSpeeds;
 import com.bilionDolarProject.projectX.controller.ShaftSpeeds;
 import com.bilionDolarProject.projectX.controller.Vehicle;

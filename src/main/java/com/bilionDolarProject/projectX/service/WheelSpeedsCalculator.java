@@ -1,8 +1,9 @@
-package com.bilionDolarProject.projectX;
+package com.bilionDolarProject.projectX.service;
 
 import com.bilionDolarProject.projectX.controller.GearsSpeeds;
 import com.bilionDolarProject.projectX.controller.ShaftSpeeds;
 import com.bilionDolarProject.projectX.entity.WheelSize;
+import com.bilionDolarProject.projectX.service.WheelSizeCalculator;
 
 
 public class WheelSpeedsCalculator {

@@ -1,4 +1,4 @@
-package com.bilionDolarProject.projectX;
+package com.bilionDolarProject.projectX.service;
 
 
 import com.bilionDolarProject.projectX.controller.ShaftSpeeds;

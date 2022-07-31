@@ -1,4 +1,4 @@
-package com.bilionDolarProject.projectX.controller.repo;
+package com.bilionDolarProject.projectX.repo;
 
 import com.bilionDolarProject.projectX.entity.PreSetGearbox;
 import org.springframework.data.jpa.repository.JpaRepository;

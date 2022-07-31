@@ -165,6 +165,7 @@ public class PreSetGearbox {
                 ", gear6=" + gear6 +
                 ", gear7=" + gear7 +
                 ", finalDrive=" + finalDrive +
+                ", carBrand='" + carBrand + '\'' +
                 '}';
     }
 }

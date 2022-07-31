@@ -1,9 +1,8 @@
 package com.bilionDolarProject.projectX.controller;
+import com.bilionDolarProject.projectX.entity.PreSetGearbox;
 import com.bilionDolarProject.projectX.service.GearSpeedsService;
 
-import com.bilionDolarProject.projectX.controller.repo.PreSetGearboxRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
+import com.bilionDolarProject.projectX.service.PreSetGearboxService;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,14 +23,12 @@ public class GearCalculatorController {
 
     }
 
-    @Bean
+
     @PostMapping("/saveGearbox")
-    CommandLineRunner commandLineRunner(PreSetGearboxRepository preSetGearboxRepository) {
-        return args -> {
+    public void PreSetGearboxService (@RequestBody PreSetGearbox preSetGearbox){
+        PreSetGearboxService.addNewPreSetGearbox(preSetGearbox);
 
-            preSetGearboxRepository.findAll();
 
-        };
     }
 
 }

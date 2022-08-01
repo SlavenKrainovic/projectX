@@ -1,16 +1,19 @@
 package com.bilionDolarProject.projectX.controller;
 import com.bilionDolarProject.projectX.entity.PreSetGearbox;
+import com.bilionDolarProject.projectX.repo.PreSetGearboxRepository;
 import com.bilionDolarProject.projectX.service.GearSpeedsService;
 
 import com.bilionDolarProject.projectX.service.PreSetGearboxService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 public class GearCalculatorController {
-
-
-
+    @Autowired
+    private PreSetGearboxService preSetGearboxService;
 
 
 
@@ -25,10 +28,14 @@ public class GearCalculatorController {
 
 
     @PostMapping("/saveGearbox")
-    public void PreSetGearboxService (@RequestBody PreSetGearbox preSetGearbox){
-        PreSetGearboxService.addNewPreSetGearbox(preSetGearbox);
-
+    public void SaveGearbox (@RequestBody PreSetGearbox preSetGearbox){
+        preSetGearboxService.addNewPreSetGearbox(preSetGearbox);
 
     }
 
+    @GetMapping("/getGearboxes")
+
+    public List<PreSetGearbox> GetAllGearboxes(){
+        return preSetGearboxService.getPreSetGearbox();
+    }
 }

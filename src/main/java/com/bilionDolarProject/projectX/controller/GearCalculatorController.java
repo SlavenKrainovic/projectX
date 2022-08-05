@@ -1,5 +1,6 @@
 package com.bilionDolarProject.projectX.controller;
 import com.bilionDolarProject.projectX.entity.PreSetGearbox;
+import com.bilionDolarProject.projectX.entity.PreSetGearboxResponse;
 import com.bilionDolarProject.projectX.repo.PreSetGearboxRepository;
 import com.bilionDolarProject.projectX.service.GearSpeedsService;
 
@@ -7,6 +8,7 @@ import com.bilionDolarProject.projectX.service.PreSetGearboxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -14,7 +16,7 @@ import java.util.List;
 public class GearCalculatorController {
     @Autowired
     private PreSetGearboxService preSetGearboxService;
-
+    private PreSetGearboxResponse preSetGearboxResponse;
 
 
     @PostMapping("/gearbox")
@@ -38,4 +40,5 @@ public class GearCalculatorController {
     public List<PreSetGearbox> GetAllGearboxes(){
         return preSetGearboxService.getPreSetGearbox();
     }
+
 }

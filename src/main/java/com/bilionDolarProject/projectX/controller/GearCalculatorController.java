@@ -1,30 +1,23 @@
 package com.bilionDolarProject.projectX.controller;
-import com.bilionDolarProject.projectX.GearRatioCalculator;
-import com.bilionDolarProject.projectX.WheelSizeCalculator;
-import com.bilionDolarProject.projectX.WheelSpeedsCalculator;
-import com.bilionDolarProject.projectX.entity.Gearbox;
-import com.bilionDolarProject.projectX.entity.WheelSize;
+import com.bilionDolarProject.projectX.entity.PreSetGearbox;
+import com.bilionDolarProject.projectX.entity.PreSetGearboxResponse;
 import com.bilionDolarProject.projectX.service.GearSpeedsService;
-import com.bilionDolarProject.projectX.service.GearboxService;
-import com.bilionDolarProject.projectX.service.MapVehicle;
+
+import com.bilionDolarProject.projectX.service.MapPreSetGearboxResponse;
+import com.bilionDolarProject.projectX.service.PreSetGearboxService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 public class GearCalculatorController {
-    private final GearboxService gearboxService;
-
     @Autowired
-    public GearCalculatorController(GearboxService gearboxService) {
-        this.gearboxService = gearboxService;
-    }
-
-
+    private PreSetGearboxService preSetGearboxService;
+    private PreSetGearboxResponse preSetGearboxResponse;
+    private MapPreSetGearboxResponse mapPreSetGearboxResponse;
+    private PreSetGearbox preSetGearbox;
     @PostMapping("/gearbox")
     public GearsSpeeds gearsSpeeds(@RequestBody Vehicle vehicle) {
         GearSpeedsService gearSpeedsService = new GearSpeedsService();
@@ -33,10 +26,34 @@ public class GearCalculatorController {
 
 
     }
-    @GetMapping("getAllgearbox")
-    public List<Gearbox> getGearbox(){
-        return gearboxService.getGearbox();
+
+
+    @PostMapping("/saveGearbox")
+    public void SaveGearbox (@RequestBody PreSetGearbox preSetGearbox){
+        preSetGearboxService.addNewPreSetGearbox(preSetGearbox);
+
     }
+
+    @GetMapping("/getGearboxes")
+
+    public List<PreSetGearbox> GetAllGearboxes(){
+        return preSetGearboxService.getPreSetGearbox();
+
+    }
+    @GetMapping("/getGearbox/{id}")
+     public PreSetGearboxResponse getPreSetGearbox (@PathVariable Long id){
+       PreSetGearbox gearbox =  preSetGearboxService.findPreSetGearboxById(id);
+        MapPreSetGearboxResponse mapPreSetGearboxResponse = new MapPreSetGearboxResponse();
+        PreSetGearboxResponse preSetGearboxResponse = mapPreSetGearboxResponse.preSetGearboxResponse(gearbox);
+        return preSetGearboxResponse;
+
+
+        //return preSetGearboxService.findPreSetGearboxById(id);
+
+    }
+
+
+
 
 
 }

@@ -37,7 +37,7 @@ public class PreSetGearboxService {
     if(preSetGearbox.isPresent()){
         return preSetGearbox.get();
     }
-    throw new IllegalStateException("gearbox does not exist");
+    throw new IllegalStateException("gearbox with id" + id + "does not exist");
     }
 
     }

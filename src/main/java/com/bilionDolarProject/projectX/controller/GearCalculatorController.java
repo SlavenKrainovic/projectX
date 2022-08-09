@@ -19,7 +19,7 @@ public class GearCalculatorController {
     private PreSetGearboxResponse preSetGearboxResponse;
     private MapPreSetGearboxResponse mapPreSetGearboxResponse;
     private PreSetGearbox preSetGearbox;
-    @PostMapping("/gearbox")
+    @PostMapping("/gearbox/calculateSpeed")
     public GearsSpeeds gearsSpeeds(@RequestBody Vehicle vehicle) {
         GearSpeedsService gearSpeedsService = new GearSpeedsService();
         GearsSpeeds gearsSpeeds2 = gearSpeedsService.gearsSpeedsService(vehicle);
@@ -29,19 +29,19 @@ public class GearCalculatorController {
     }
 
 
-    @PostMapping("/saveGearbox")
+    @PostMapping("/gearbox/save")
     public void SaveGearbox (@RequestBody PreSetGearbox preSetGearbox){
         preSetGearboxService.addNewPreSetGearbox(preSetGearbox);
 
     }
 
-    @GetMapping("/getGearboxes")
+    @GetMapping("/gearbox/getAllList")
     public List<PreSetGearbox> GetAllGearboxes(){
         return preSetGearboxService.getPreSetGearbox();
 
 
     }
-    @GetMapping("/getGearbox/{id}")
+    @GetMapping("/gearbox/getById/{id}")
      public PreSetGearboxResponse getPreSetGearbox (@PathVariable Long id){
        PreSetGearbox gearbox =  preSetGearboxService.findPreSetGearboxById(id);
        MapPreSetGearboxResponse mapPreSetGearboxResponse = new MapPreSetGearboxResponse();
@@ -49,7 +49,7 @@ public class GearCalculatorController {
        return preSetGearboxResponse;
 
     }
-    @GetMapping("/getGearboxes1")
+    @GetMapping("/gearbox/getAll")
     private List<PreSetGearboxResponse> listOfGearboxes(){
         int n = preSetGearboxService.getPreSetGearbox().size();
         MapPreSetGearboxResponse mapPreSetGearboxResponse = new MapPreSetGearboxResponse();

@@ -32,16 +32,16 @@ public class MapPreSetGearboxResponse {
             SubObjectGearbox subObjectGearbox5 = new SubObjectGearbox(gear5,ratio5);
             SubObjectGearbox subObjectGearbox6 = new SubObjectGearbox(gear6,ratio6);
             SubObjectGearbox subObjectGearbox7 = new SubObjectGearbox(gear7,ratio7);
-            ArrayList<SubObjectGearbox> subObjectGearboxes = new ArrayList<SubObjectGearbox>();
-            subObjectGearboxes.add(subObjectGearbox1);
-            subObjectGearboxes.add(subObjectGearbox2);
-            subObjectGearboxes.add(subObjectGearbox3);
-            subObjectGearboxes.add(subObjectGearbox4);
-            subObjectGearboxes.add(subObjectGearbox5);
-            subObjectGearboxes.add(subObjectGearbox6);
-            subObjectGearboxes.add(subObjectGearbox7);
+            ArrayList<SubObjectGearbox> gears = new ArrayList<SubObjectGearbox>();
+            gears.add(subObjectGearbox1);
+            gears.add(subObjectGearbox2);
+            gears.add(subObjectGearbox3);
+            gears.add(subObjectGearbox4);
+            gears.add(subObjectGearbox5);
+            gears.add(subObjectGearbox6);
+            gears.add(subObjectGearbox7);
 
-            PreSetGearboxResponse preSetGearboxResponse = new PreSetGearboxResponse(preSetGearbox.getCarBrand(), preSetGearbox.getName(), preSetGearbox.getFinalDrive(), subObjectGearboxes);
+            PreSetGearboxResponse preSetGearboxResponse = new PreSetGearboxResponse(preSetGearbox.getCarBrand(), preSetGearbox.getName(), preSetGearbox.getFinalDrive(), gears);
             return preSetGearboxResponse;
         }
 

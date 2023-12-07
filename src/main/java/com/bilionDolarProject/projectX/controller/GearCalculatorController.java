@@ -29,26 +29,32 @@ public class GearCalculatorController {
 
     }
     @PostMapping("/gearbox/calculateSpeeds")
-    public Map<String, GearsSpeeds> calculateSpeeds(@RequestBody Vehicle vehicle) {
+    public List<Map<String, Map<String, Double>>> calculateSpeeds(@RequestBody Vehicle vehicle) {
         GearSpeedsService gearSpeedsService = new GearSpeedsService();
-        Map<String, GearsSpeeds> gearsSpeedsMap = new HashMap<>();
+        List<Map<String, Map<String, Double>>> gearSpeedsList = new ArrayList<>();
         int baseRpm = vehicle.getMaxRpm();
         for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
             vehicle.setMaxRpm(rpm);
             GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
-            gearsSpeedsMap.put("rpm " + rpm, gearsSpeeds);
+            Map<String, Double> gearsSpeedsMap = new HashMap<>();
+            gearsSpeedsMap.put("gearSpeed1", gearsSpeeds.getGearSpeed1());
+            gearsSpeedsMap.put("gearSpeed2", gearsSpeeds.getGearSpeed2());
+            gearsSpeedsMap.put("gearSpeed3", gearsSpeeds.getGearSpeed3());
+            gearsSpeedsMap.put("gearSpeed4", gearsSpeeds.getGearSpeed4());
+            gearsSpeedsMap.put("gearSpeed5", gearsSpeeds.getGearSpeed5());
+            gearsSpeedsMap.put("gearSpeed6", gearsSpeeds.getGearSpeed6());
+
+            Map<String, Map<String, Double>> gearSpeedsWrapper = new HashMap<>();
+            gearSpeedsWrapper.put("rpm " + rpm, gearsSpeedsMap);
+            gearSpeedsList.add(gearSpeedsWrapper);
         }
 
-        List<Map.Entry<String, GearsSpeeds>> list = new ArrayList<>(gearsSpeedsMap.entrySet());
-        list.sort(Map.Entry.comparingByKey(Comparator.comparingInt(s -> Integer.parseInt(s.split(" ")[1]))));
+        gearSpeedsList.sort(Comparator.comparingInt(map -> Integer.parseInt(map.keySet().iterator().next().split(" ")[1])));
 
-        Map<String, GearsSpeeds> sortedGearsSpeedsMap = new LinkedHashMap<>();
-        for (Map.Entry<String, GearsSpeeds> entry : list) {
-            sortedGearsSpeedsMap.put(entry.getKey(), entry.getValue());
-        }
-
-        return sortedGearsSpeedsMap;
+        return gearSpeedsList;
     }
+
+
 
 
     @PostMapping("/gearbox/save")

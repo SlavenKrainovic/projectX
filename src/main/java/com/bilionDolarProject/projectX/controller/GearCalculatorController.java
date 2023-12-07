@@ -24,21 +24,33 @@ public class GearCalculatorController {
         GearSpeedsService gearSpeedsService = new GearSpeedsService();
         GearsSpeeds gearsSpeeds2 = gearSpeedsService.gearsSpeedsService(vehicle);
         return gearsSpeeds2;
-
+    //Calculate the speed and return seeds for only for max RPM
 
     }
-
+    @PostMapping("/gearbox/calculateSpeeds")
+    public List<GearsSpeeds> calculateSpeeds(@RequestBody Vehicle vehicle) {
+        GearSpeedsService gearSpeedsService = new GearSpeedsService();
+        List<GearsSpeeds> gearsSpeedsList = new ArrayList<>();
+        int baseRpm = vehicle.getMaxRpm();
+        for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
+            vehicle.setMaxRpm(rpm);
+            GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
+            gearsSpeedsList.add(gearsSpeeds);
+        }
+        return gearsSpeedsList;
+        // Calculate the speeds and return array for all RPM from 50 to max RPM
+    }
 
     @PostMapping("/gearbox/save")
     public void SaveGearbox (@RequestBody PreSetGearbox preSetGearbox){
         preSetGearboxService.addNewPreSetGearbox(preSetGearbox);
-
+    //Saves preset Gearboxes to base
     }
 
     @GetMapping("/gearbox/getAllList")
     public List<PreSetGearbox> GetAllGearboxes(){
         return preSetGearboxService.getPreSetGearbox();
-
+    //return all gerboxes from base
 
     }
     @GetMapping("/gearbox/getById/{id}")
@@ -47,7 +59,7 @@ public class GearCalculatorController {
        MapPreSetGearboxResponse mapPreSetGearboxResponse = new MapPreSetGearboxResponse();
        PreSetGearboxResponse preSetGearboxResponse = mapPreSetGearboxResponse.preSetGearboxResponse(gearbox);
        return preSetGearboxResponse;
-
+    //return gearboxes by id
     }
     @GetMapping("/gearbox/getAll")
     private List<PreSetGearboxResponse> listOfGearboxes(){
@@ -63,6 +75,7 @@ public class GearCalculatorController {
             b++;
             listOfBoxes.add(preSetGearboxResponse);
         }
+        //return all gearboxes with all data
             return listOfBoxes;
         }
 

@@ -7,9 +7,10 @@ import com.bilionDolarProject.projectX.service.MapPreSetGearboxResponse;
 import com.bilionDolarProject.projectX.service.PreSetGearboxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
@@ -28,18 +29,27 @@ public class GearCalculatorController {
 
     }
     @PostMapping("/gearbox/calculateSpeeds")
-    public List<GearsSpeeds> calculateSpeeds(@RequestBody Vehicle vehicle) {
+    public Map<String, GearsSpeeds> calculateSpeeds(@RequestBody Vehicle vehicle) {
         GearSpeedsService gearSpeedsService = new GearSpeedsService();
-        List<GearsSpeeds> gearsSpeedsList = new ArrayList<>();
+        Map<String, GearsSpeeds> gearsSpeedsMap = new HashMap<>();
         int baseRpm = vehicle.getMaxRpm();
         for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
             vehicle.setMaxRpm(rpm);
             GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
-            gearsSpeedsList.add(gearsSpeeds);
+            gearsSpeedsMap.put("rpm " + rpm, gearsSpeeds);
         }
-        return gearsSpeedsList;
-        // Calculate the speeds and return array for all RPM from 50 to max RPM
+
+        List<Map.Entry<String, GearsSpeeds>> list = new ArrayList<>(gearsSpeedsMap.entrySet());
+        list.sort(Map.Entry.comparingByKey(Comparator.comparingInt(s -> Integer.parseInt(s.split(" ")[1]))));
+
+        Map<String, GearsSpeeds> sortedGearsSpeedsMap = new LinkedHashMap<>();
+        for (Map.Entry<String, GearsSpeeds> entry : list) {
+            sortedGearsSpeedsMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedGearsSpeedsMap;
     }
+
 
     @PostMapping("/gearbox/save")
     public void SaveGearbox (@RequestBody PreSetGearbox preSetGearbox){

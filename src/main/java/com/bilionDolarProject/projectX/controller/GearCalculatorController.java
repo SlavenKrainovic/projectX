@@ -1,46 +1,49 @@
 package com.bilionDolarProject.projectX.controller;
+
+import com.bilionDolarProject.projectX.dto.PreSetGearboxDTO;
+import com.bilionDolarProject.projectX.dto.VehicleDTO;
 import com.bilionDolarProject.projectX.entity.PreSetGearbox;
 import com.bilionDolarProject.projectX.entity.PreSetGearboxResponse;
 import com.bilionDolarProject.projectX.service.GearSpeedsService;
-
 import com.bilionDolarProject.projectX.service.MapPreSetGearboxResponse;
 import com.bilionDolarProject.projectX.service.PreSetGearboxService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.*;
 
-
 @RestController
+@RequestMapping("/api/v1/gearbox")
+@RequiredArgsConstructor
+@Tag(name = "Gearbox Calculator", description = "APIs for calculating gear ratios and speeds")
 public class GearCalculatorController {
 
-    @Autowired
-    private PreSetGearboxService preSetGearboxService;
-    private PreSetGearboxResponse preSetGearboxResponse;
-    private MapPreSetGearboxResponse mapPreSetGearboxResponse;
-    private PreSetGearbox preSetGearbox;
+    private final PreSetGearboxService preSetGearboxService;
+    private final GearSpeedsService gearSpeedsService;
+    private final MapPreSetGearboxResponse mapPreSetGearboxResponse;
 
-
-    @PostMapping("/gearbox/calculateSpeed")
-    public GearsSpeeds gearsSpeeds(@RequestBody Vehicle vehicle) {
-        GearSpeedsService gearSpeedsService = new GearSpeedsService();
-        GearsSpeeds gearsSpeeds2 = gearSpeedsService.gearsSpeedsService(vehicle);
-        return gearsSpeeds2;
-    //Calculate the speed and return seeds for only for max RPM
+    @Operation(summary = "Calculate speeds for maximum RPM")
+    @PostMapping("/calculateSpeed")
+    public ResponseEntity<GearsSpeeds> calculateSpeed(@Valid @RequestBody VehicleDTO vehicle) {
+        GearsSpeeds speeds = gearSpeedsService.gearsSpeedsService(mapToVehicle(vehicle));
+        return ResponseEntity.ok(speeds);
     }
 
-
-
-    @PostMapping("/gearbox/calculateSpeeds")
-    public List<Map<String, Map<String, Double>>> calculateSpeeds(@RequestBody Vehicle vehicle) {
-        GearSpeedsService gearSpeedsService = new GearSpeedsService();
+    @Operation(summary = "Calculate speeds for RPM range")
+    @PostMapping("/calculateSpeeds")
+    public ResponseEntity<List<Map<String, Map<String, Double>>>> calculateSpeeds(@Valid @RequestBody VehicleDTO vehicleDTO) {
+        Vehicle vehicle = mapToVehicle(vehicleDTO);
         List<Map<String, Map<String, Double>>> gearSpeedsList = new ArrayList<>();
+        
         int baseRpm = vehicle.getMaxRpm();
         for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
             vehicle.setMaxRpm(rpm);
             GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
+            
             Map<String, Double> gearsSpeedsMap = new HashMap<>();
             gearsSpeedsMap.put("gearSpeed1", gearsSpeeds.getGearSpeed1());
             gearsSpeedsMap.put("gearSpeed2", gearsSpeeds.getGearSpeed2());
@@ -54,53 +57,73 @@ public class GearCalculatorController {
             gearSpeedsList.add(gearSpeedsWrapper);
         }
 
-        gearSpeedsList.sort(Comparator.comparingInt(map -> Integer.parseInt(map.keySet().iterator().next().split(" ")[1])));
+        gearSpeedsList.sort(Comparator.comparingInt(map -> 
+            Integer.parseInt(map.keySet().iterator().next().split(" ")[1])));
 
-        return gearSpeedsList;
+        return ResponseEntity.ok(gearSpeedsList);
     }
 
-    @PostMapping("/gearbox/save")
-    public void SaveGearbox (@RequestBody PreSetGearbox preSetGearbox){
-        preSetGearboxService.addNewPreSetGearbox(preSetGearbox);
-    //Saves preset Gearboxes to base
+    @Operation(summary = "Save a new gearbox preset")
+    @PostMapping("/save")
+    public ResponseEntity<Void> saveGearbox(@Valid @RequestBody PreSetGearboxDTO preSetGearboxDTO) {
+        preSetGearboxService.addNewPreSetGearbox(mapToPreSetGearbox(preSetGearboxDTO));
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/gearbox/getAllList")
-    public List<PreSetGearbox> GetAllGearboxes(){
-        return preSetGearboxService.getPreSetGearbox();
-    //return all gerboxes from base
-
+    @Operation(summary = "Get all gearbox presets")
+    @GetMapping("/getAllList")
+    public ResponseEntity<List<PreSetGearbox>> getAllGearboxes() {
+        return ResponseEntity.ok(preSetGearboxService.getPreSetGearbox());
     }
 
-    @GetMapping("/gearbox/getById/{id}")
-     public PreSetGearboxResponse getPreSetGearbox (@PathVariable Long id){
-       PreSetGearbox gearbox =  preSetGearboxService.findPreSetGearboxById(id);
-       MapPreSetGearboxResponse mapPreSetGearboxResponse = new MapPreSetGearboxResponse();
-       PreSetGearboxResponse preSetGearboxResponse = mapPreSetGearboxResponse.preSetGearboxResponse(gearbox);
-       return preSetGearboxResponse;
-    //return gearboxes by id
+    @Operation(summary = "Get a gearbox preset by ID")
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<PreSetGearboxResponse> getPreSetGearbox(@PathVariable Long id) {
+        PreSetGearbox gearbox = preSetGearboxService.findPreSetGearboxById(id);
+        return ResponseEntity.ok(mapPreSetGearboxResponse.preSetGearboxResponse(gearbox));
     }
 
-    @GetMapping("/gearbox/getAll")
-    private List<PreSetGearboxResponse> listOfGearboxes(){
-        int n = preSetGearboxService.getPreSetGearbox().size();
-        MapPreSetGearboxResponse mapPreSetGearboxResponse = new MapPreSetGearboxResponse();
-        PreSetGearbox gearbox = new PreSetGearbox();
-        PreSetGearboxResponse preSetGearboxResponse = new PreSetGearboxResponse();
-        Long b = 1L;
-        List<PreSetGearboxResponse> listOfBoxes = new ArrayList<PreSetGearboxResponse>();
-        for(int i = 0; i < n; i++){
-            gearbox =  preSetGearboxService.findPreSetGearboxById(b);
-            preSetGearboxResponse = mapPreSetGearboxResponse.preSetGearboxResponse(gearbox);
-            b++;
-            listOfBoxes.add(preSetGearboxResponse);
+    @Operation(summary = "Get all gearbox presets with detailed information")
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PreSetGearboxResponse>> getAllGearboxesDetailed() {
+        List<PreSetGearboxResponse> responses = new ArrayList<>();
+        List<PreSetGearbox> gearboxes = preSetGearboxService.getPreSetGearbox();
+        
+        for (PreSetGearbox gearbox : gearboxes) {
+            responses.add(mapPreSetGearboxResponse.preSetGearboxResponse(gearbox));
         }
-        //return all gearboxes with all data
-            return listOfBoxes;
-        }
+        
+        return ResponseEntity.ok(responses);
+    }
 
+    private Vehicle mapToVehicle(VehicleDTO dto) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setMaxRpm(dto.getMaxRpm());
+        vehicle.setGearRatio1(dto.getGearRatio1());
+        vehicle.setGearRatio2(dto.getGearRatio2());
+        vehicle.setGearRatio3(dto.getGearRatio3());
+        vehicle.setGearRatio4(dto.getGearRatio4());
+        vehicle.setGearRatio5(dto.getGearRatio5());
+        vehicle.setGearRatio6(dto.getGearRatio6());
+        vehicle.setFinalDrive(dto.getFinalDrive());
+        vehicle.setTyreWidth(dto.getTyreWidth());
+        vehicle.setTyreProfile(dto.getTyreProfile());
+        vehicle.setWheelDiameter(dto.getWheelDiameter());
+        return vehicle;
+    }
+
+    private PreSetGearbox mapToPreSetGearbox(PreSetGearboxDTO dto) {
+        return new PreSetGearbox(
+            dto.getName(),
+            dto.getGear1(),
+            dto.getGear2(),
+            dto.getGear3(),
+            dto.getGear4(),
+            dto.getGear5(),
+            dto.getGear6(),
+            dto.getGear7(),
+            dto.getFinalDrive(),
+            dto.getCarBrand()
+        );
+    }
 }
-
-
-
-

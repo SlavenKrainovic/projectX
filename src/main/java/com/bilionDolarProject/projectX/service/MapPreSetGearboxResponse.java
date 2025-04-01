@@ -3,9 +3,11 @@ package com.bilionDolarProject.projectX.service;
 import com.bilionDolarProject.projectX.entity.PreSetGearbox;
 import com.bilionDolarProject.projectX.entity.PreSetGearboxResponse;
 import com.bilionDolarProject.projectX.entity.SubObjectGearbox;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@Service
 public class MapPreSetGearboxResponse {
         public PreSetGearboxResponse preSetGearboxResponse(PreSetGearbox preSetGearbox){
             String brand = preSetGearbox.getCarBrand();
@@ -44,8 +46,4 @@ public class MapPreSetGearboxResponse {
             PreSetGearboxResponse preSetGearboxResponse = new PreSetGearboxResponse(preSetGearbox.getCarBrand(), preSetGearbox.getName(), preSetGearbox.getFinalDrive(), gears);
             return preSetGearboxResponse;
         }
-
-
-
-
 }

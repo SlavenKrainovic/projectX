@@ -1,33 +1,30 @@
 package com.bilionDolarProject.projectX.service;
 
-import com.bilionDolarProject.projectX.controller.Vehicle;
+import com.bilionDolarProject.projectX.entity.Vehicle;
 import com.bilionDolarProject.projectX.entity.Gearbox;
 import com.bilionDolarProject.projectX.entity.WheelSize;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MapVehicle {
-    public Gearbox gearbox (Vehicle vehicle) {
-        double speed1 = vehicle.getGearRatio1();
-        double speed2 = vehicle.getGearRatio2();
-        double speed3 = vehicle.getGearRatio3();
-        double speed4 = vehicle.getGearRatio4();
-        double speed5 = vehicle.getGearRatio5();
-        double speed6 = vehicle.getGearRatio6();
-        double fina = vehicle.getFinalDrive();
-        int rpm1 = vehicle.getMaxRpm();
-        Gearbox gearbox = new Gearbox(rpm1,speed1,speed2,speed3,speed4,speed5,speed6,fina);
+    public Gearbox gearbox(Vehicle vehicle) {
+        Gearbox gearbox = new Gearbox();
+        gearbox.setGear1(vehicle.getGearRatio1());
+        gearbox.setGear2(vehicle.getGearRatio2());
+        gearbox.setGear3(vehicle.getGearRatio3());
+        gearbox.setGear4(vehicle.getGearRatio4());
+        gearbox.setGear5(vehicle.getGearRatio5());
+        gearbox.setGear6(vehicle.getGearRatio6());
+        gearbox.setGear7(vehicle.getGearRatio7());
+        gearbox.setFinalDrive(vehicle.getFinalDrive());
         return gearbox;
     }
-    public WheelSize wheelSize (Vehicle vehicle){
-        int tyrP = vehicle.getTyreProfile();
-        int tyrW = vehicle.getTyreWidth();
-        int tyrD = vehicle.getWheelDiameter();
 
-        WheelSize wheelSize = new WheelSize(tyrW,tyrP,tyrD);
+    public WheelSize wheelSize(Vehicle vehicle) {
+        WheelSize wheelSize = new WheelSize();
+        wheelSize.setTyreWidth(vehicle.getTyreWidth());
+        wheelSize.setTyreProfile(vehicle.getTyreProfile());
+        wheelSize.setWheelDiameter(vehicle.getWheelDiameter());
         return wheelSize;
     }
-
-
-
-
-
 }

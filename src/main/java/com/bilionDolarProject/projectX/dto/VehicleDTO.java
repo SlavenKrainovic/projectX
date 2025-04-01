@@ -1,44 +1,46 @@
 package com.bilionDolarProject.projectX.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.bilionDolarProject.projectX.validation.OptionalPositive;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class VehicleDTO {
     @NotNull(message = "Max RPM is required")
     @Min(value = 1000, message = "Max RPM must be at least 1000")
     @Max(value = 15000, message = "Max RPM cannot exceed 15000")
     private Integer maxRpm;
 
-    @NotNull(message = "Gear ratio 1 is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @NotNull(message = "At least first gear ratio is required")
+    @Positive(message = "Gear ratio must be positive")
     private Double gearRatio1;
 
-    @NotNull(message = "Gear ratio 2 is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @OptionalPositive(message = "Gear ratio must not be negative")
     private Double gearRatio2;
 
-    @NotNull(message = "Gear ratio 3 is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @OptionalPositive(message = "Gear ratio must not be negative")
     private Double gearRatio3;
 
-    @NotNull(message = "Gear ratio 4 is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @OptionalPositive(message = "Gear ratio must not be negative")
     private Double gearRatio4;
 
-    @NotNull(message = "Gear ratio 5 is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @OptionalPositive(message = "Gear ratio must not be negative")
     private Double gearRatio5;
 
-    @NotNull(message = "Gear ratio 6 is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @OptionalPositive(message = "Gear ratio must not be negative")
     private Double gearRatio6;
 
+    @OptionalPositive(message = "Gear ratio must not be negative")
+    private Double gearRatio7;
+
     @NotNull(message = "Final drive ratio is required")
-    @Min(value = 0, message = "Final drive ratio must be positive")
+    @Positive(message = "Final drive ratio must be positive")
     private Double finalDrive;
 
     @NotNull(message = "Tyre width is required")

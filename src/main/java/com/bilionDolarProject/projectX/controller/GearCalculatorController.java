@@ -2,8 +2,10 @@ package com.bilionDolarProject.projectX.controller;
 
 import com.bilionDolarProject.projectX.dto.PreSetGearboxDTO;
 import com.bilionDolarProject.projectX.dto.VehicleDTO;
+import com.bilionDolarProject.projectX.entity.GearsSpeeds;
 import com.bilionDolarProject.projectX.entity.PreSetGearbox;
 import com.bilionDolarProject.projectX.entity.PreSetGearboxResponse;
+import com.bilionDolarProject.projectX.entity.Vehicle;
 import com.bilionDolarProject.projectX.service.GearSpeedsService;
 import com.bilionDolarProject.projectX.service.MapPreSetGearboxResponse;
 import com.bilionDolarProject.projectX.service.PreSetGearboxService;
@@ -35,32 +37,28 @@ public class GearCalculatorController {
 
     @Operation(summary = "Calculate speeds for RPM range")
     @PostMapping("/calculateSpeeds")
-    public ResponseEntity<List<Map<String, Map<String, Double>>>> calculateSpeeds(@Valid @RequestBody VehicleDTO vehicleDTO) {
+    public ResponseEntity<Map<Integer, Map<String, Double>>> calculateSpeeds(@Valid @RequestBody VehicleDTO vehicleDTO) {
         Vehicle vehicle = mapToVehicle(vehicleDTO);
-        List<Map<String, Map<String, Double>>> gearSpeedsList = new ArrayList<>();
+        Map<Integer, Map<String, Double>> rpmToSpeedsMap = new TreeMap<>();
         
         int baseRpm = vehicle.getMaxRpm();
         for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
             vehicle.setMaxRpm(rpm);
             GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
             
-            Map<String, Double> gearsSpeedsMap = new HashMap<>();
-            gearsSpeedsMap.put("gearSpeed1", gearsSpeeds.getGearSpeed1());
-            gearsSpeedsMap.put("gearSpeed2", gearsSpeeds.getGearSpeed2());
-            gearsSpeedsMap.put("gearSpeed3", gearsSpeeds.getGearSpeed3());
-            gearsSpeedsMap.put("gearSpeed4", gearsSpeeds.getGearSpeed4());
-            gearsSpeedsMap.put("gearSpeed5", gearsSpeeds.getGearSpeed5());
-            gearsSpeedsMap.put("gearSpeed6", gearsSpeeds.getGearSpeed6());
+            Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
+            if (gearsSpeeds.getGearSpeed1() != null) gearsSpeedsMap.put("gear1", gearsSpeeds.getGearSpeed1());
+            if (gearsSpeeds.getGearSpeed2() != null) gearsSpeedsMap.put("gear2", gearsSpeeds.getGearSpeed2());
+            if (gearsSpeeds.getGearSpeed3() != null) gearsSpeedsMap.put("gear3", gearsSpeeds.getGearSpeed3());
+            if (gearsSpeeds.getGearSpeed4() != null) gearsSpeedsMap.put("gear4", gearsSpeeds.getGearSpeed4());
+            if (gearsSpeeds.getGearSpeed5() != null) gearsSpeedsMap.put("gear5", gearsSpeeds.getGearSpeed5());
+            if (gearsSpeeds.getGearSpeed6() != null) gearsSpeedsMap.put("gear6", gearsSpeeds.getGearSpeed6());
+            if (gearsSpeeds.getGearSpeed7() != null) gearsSpeedsMap.put("gear7", gearsSpeeds.getGearSpeed7());
 
-            Map<String, Map<String, Double>> gearSpeedsWrapper = new HashMap<>();
-            gearSpeedsWrapper.put("rpm " + rpm, gearsSpeedsMap);
-            gearSpeedsList.add(gearSpeedsWrapper);
+            rpmToSpeedsMap.put(rpm, gearsSpeedsMap);
         }
 
-        gearSpeedsList.sort(Comparator.comparingInt(map -> 
-            Integer.parseInt(map.keySet().iterator().next().split(" ")[1])));
-
-        return ResponseEntity.ok(gearSpeedsList);
+        return ResponseEntity.ok(rpmToSpeedsMap);
     }
 
     @Operation(summary = "Save a new gearbox preset")
@@ -105,6 +103,7 @@ public class GearCalculatorController {
         vehicle.setGearRatio4(dto.getGearRatio4());
         vehicle.setGearRatio5(dto.getGearRatio5());
         vehicle.setGearRatio6(dto.getGearRatio6());
+        vehicle.setGearRatio7(dto.getGearRatio7());
         vehicle.setFinalDrive(dto.getFinalDrive());
         vehicle.setTyreWidth(dto.getTyreWidth());
         vehicle.setTyreProfile(dto.getTyreProfile());

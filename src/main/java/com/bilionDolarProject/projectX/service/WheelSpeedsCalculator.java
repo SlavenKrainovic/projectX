@@ -1,27 +1,39 @@
 package com.bilionDolarProject.projectX.service;
 
-import com.bilionDolarProject.projectX.controller.GearsSpeeds;
-import com.bilionDolarProject.projectX.controller.ShaftSpeeds;
+import com.bilionDolarProject.projectX.entity.GearsSpeeds;
+import com.bilionDolarProject.projectX.entity.ShaftSpeeds;
 import com.bilionDolarProject.projectX.entity.WheelSize;
 import com.bilionDolarProject.projectX.service.WheelSizeCalculator;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class WheelSpeedsCalculator {
-    public GearsSpeeds gearsSpeeds(ShaftSpeeds shaftSpeeds, WheelSizeCalculator wheelSizeCalculator, WheelSize wheelSize){
-
-
+    public GearsSpeeds gearsSpeeds(ShaftSpeeds shaftSpeeds, WheelSizeCalculator wheelSizeCalculator, WheelSize wheelSize) {
+        GearsSpeeds gearsSpeeds = new GearsSpeeds();
         double dia = wheelSizeCalculator.getcompleteWheelDiameter(wheelSize);
 
-        double st1 = 0.1885 * shaftSpeeds.getFirstSpeed() * dia;
-        double st2 = 0.1885 * shaftSpeeds.getSecondSpeed() * dia;
-        double st3 = 0.1885 * shaftSpeeds.getThirdSpeed() * dia;
-        double st4 = 0.1885 * shaftSpeeds.getFourSpeed() * dia;
-        double st5 = 0.1885 * shaftSpeeds.getFiveSpeed() * dia;
-        double st6 = 0.1885 * shaftSpeeds.getSixSpeed() * dia;
-        GearsSpeeds gearsSpeeds = new GearsSpeeds(st1,st2,st3,st4,st5,st6);
-        //wheell speed in kmh
+        if (shaftSpeeds.getShaftSpeed1() != null) {
+            gearsSpeeds.setGearSpeed1(0.1885 * shaftSpeeds.getShaftSpeed1() * dia);
+        }
+        if (shaftSpeeds.getShaftSpeed2() != null) {
+            gearsSpeeds.setGearSpeed2(0.1885 * shaftSpeeds.getShaftSpeed2() * dia);
+        }
+        if (shaftSpeeds.getShaftSpeed3() != null) {
+            gearsSpeeds.setGearSpeed3(0.1885 * shaftSpeeds.getShaftSpeed3() * dia);
+        }
+        if (shaftSpeeds.getShaftSpeed4() != null) {
+            gearsSpeeds.setGearSpeed4(0.1885 * shaftSpeeds.getShaftSpeed4() * dia);
+        }
+        if (shaftSpeeds.getShaftSpeed5() != null) {
+            gearsSpeeds.setGearSpeed5(0.1885 * shaftSpeeds.getShaftSpeed5() * dia);
+        }
+        if (shaftSpeeds.getShaftSpeed6() != null) {
+            gearsSpeeds.setGearSpeed6(0.1885 * shaftSpeeds.getShaftSpeed6() * dia);
+        }
+        if (shaftSpeeds.getShaftSpeed7() != null) {
+            gearsSpeeds.setGearSpeed7(0.1885 * shaftSpeeds.getShaftSpeed7() * dia);
+        }
 
         return gearsSpeeds;
-
     }
 }

@@ -41,7 +41,18 @@ public class GearCalculatorController {
     @PostMapping("/calculateSpeed")
     public ResponseEntity<GearsSpeeds> calculateSpeed(@Valid @RequestBody VehicleDTO vehicle) {
         GearsSpeeds speeds = gearSpeedsService.gearsSpeedsService(mapToVehicle(vehicle));
-        return ResponseEntity.ok(speeds);
+        if (speeds == null) {
+            return ResponseEntity.ok(new GearsSpeeds());
+        }
+        GearsSpeeds formattedSpeeds = new GearsSpeeds();
+        formattedSpeeds.setGearSpeed1(speeds.getGearSpeed1() != null ? Math.round(speeds.getGearSpeed1() * 100.0) / 100.0 : null);
+        formattedSpeeds.setGearSpeed2(speeds.getGearSpeed2() != null ? Math.round(speeds.getGearSpeed2() * 100.0) / 100.0 : null);
+        formattedSpeeds.setGearSpeed3(speeds.getGearSpeed3() != null ? Math.round(speeds.getGearSpeed3() * 100.0) / 100.0 : null);
+        formattedSpeeds.setGearSpeed4(speeds.getGearSpeed4() != null ? Math.round(speeds.getGearSpeed4() * 100.0) / 100.0 : null);
+        formattedSpeeds.setGearSpeed5(speeds.getGearSpeed5() != null ? Math.round(speeds.getGearSpeed5() * 100.0) / 100.0 : null);
+        formattedSpeeds.setGearSpeed6(speeds.getGearSpeed6() != null ? Math.round(speeds.getGearSpeed6() * 100.0) / 100.0 : null);
+        formattedSpeeds.setGearSpeed7(speeds.getGearSpeed7() != null ? Math.round(speeds.getGearSpeed7() * 100.0) / 100.0 : null);
+        return ResponseEntity.ok(formattedSpeeds);
     }
 
     @Operation(summary = "Calculate speeds for RPM range")
@@ -56,13 +67,13 @@ public class GearCalculatorController {
             GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
             
             Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
-            if (gearsSpeeds.getGearSpeed1() != null) gearsSpeedsMap.put("gear1", gearsSpeeds.getGearSpeed1());
-            if (gearsSpeeds.getGearSpeed2() != null) gearsSpeedsMap.put("gear2", gearsSpeeds.getGearSpeed2());
-            if (gearsSpeeds.getGearSpeed3() != null) gearsSpeedsMap.put("gear3", gearsSpeeds.getGearSpeed3());
-            if (gearsSpeeds.getGearSpeed4() != null) gearsSpeedsMap.put("gear4", gearsSpeeds.getGearSpeed4());
-            if (gearsSpeeds.getGearSpeed5() != null) gearsSpeedsMap.put("gear5", gearsSpeeds.getGearSpeed5());
-            if (gearsSpeeds.getGearSpeed6() != null) gearsSpeedsMap.put("gear6", gearsSpeeds.getGearSpeed6());
-            if (gearsSpeeds.getGearSpeed7() != null) gearsSpeedsMap.put("gear7", gearsSpeeds.getGearSpeed7());
+            if (gearsSpeeds.getGearSpeed1() != null) gearsSpeedsMap.put("gear1", Math.round(gearsSpeeds.getGearSpeed1() * 100.0) / 100.0);
+            if (gearsSpeeds.getGearSpeed2() != null) gearsSpeedsMap.put("gear2", Math.round(gearsSpeeds.getGearSpeed2() * 100.0) / 100.0);
+            if (gearsSpeeds.getGearSpeed3() != null) gearsSpeedsMap.put("gear3", Math.round(gearsSpeeds.getGearSpeed3() * 100.0) / 100.0);
+            if (gearsSpeeds.getGearSpeed4() != null) gearsSpeedsMap.put("gear4", Math.round(gearsSpeeds.getGearSpeed4() * 100.0) / 100.0);
+            if (gearsSpeeds.getGearSpeed5() != null) gearsSpeedsMap.put("gear5", Math.round(gearsSpeeds.getGearSpeed5() * 100.0) / 100.0);
+            if (gearsSpeeds.getGearSpeed6() != null) gearsSpeedsMap.put("gear6", Math.round(gearsSpeeds.getGearSpeed6() * 100.0) / 100.0);
+            if (gearsSpeeds.getGearSpeed7() != null) gearsSpeedsMap.put("gear7", Math.round(gearsSpeeds.getGearSpeed7() * 100.0) / 100.0);
 
             rpmToSpeedsMap.put(rpm, gearsSpeedsMap);
         }

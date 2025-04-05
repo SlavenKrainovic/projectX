@@ -17,8 +17,8 @@ public class GearSpeedsService {
             vehicle.getWheelDiameter()
         );
 
-        // Calculate speeds for each gear if present
-        if (vehicle.getGearRatio1() != null) {
+        // Calculate speeds for each gear if present and not zero
+        if (vehicle.getGearRatio1() != null && vehicle.getGearRatio1() != 0) {
             gearsSpeeds.setGearSpeed1(calculateSpeed(
                 vehicle.getMaxRpm(),
                 vehicle.getGearRatio1(),
@@ -27,7 +27,7 @@ public class GearSpeedsService {
             ));
         }
 
-        if (vehicle.getGearRatio2() != null) {
+        if (vehicle.getGearRatio2() != null && vehicle.getGearRatio2() != 0) {
             gearsSpeeds.setGearSpeed2(calculateSpeed(
                 vehicle.getMaxRpm(),
                 vehicle.getGearRatio2(),
@@ -36,7 +36,7 @@ public class GearSpeedsService {
             ));
         }
 
-        if (vehicle.getGearRatio3() != null) {
+        if (vehicle.getGearRatio3() != null && vehicle.getGearRatio3() != 0) {
             gearsSpeeds.setGearSpeed3(calculateSpeed(
                 vehicle.getMaxRpm(),
                 vehicle.getGearRatio3(),
@@ -45,7 +45,7 @@ public class GearSpeedsService {
             ));
         }
 
-        if (vehicle.getGearRatio4() != null) {
+        if (vehicle.getGearRatio4() != null && vehicle.getGearRatio4() != 0) {
             gearsSpeeds.setGearSpeed4(calculateSpeed(
                 vehicle.getMaxRpm(),
                 vehicle.getGearRatio4(),
@@ -54,7 +54,7 @@ public class GearSpeedsService {
             ));
         }
 
-        if (vehicle.getGearRatio5() != null) {
+        if (vehicle.getGearRatio5() != null && vehicle.getGearRatio5() != 0) {
             gearsSpeeds.setGearSpeed5(calculateSpeed(
                 vehicle.getMaxRpm(),
                 vehicle.getGearRatio5(),
@@ -63,7 +63,7 @@ public class GearSpeedsService {
             ));
         }
 
-        if (vehicle.getGearRatio6() != null) {
+        if (vehicle.getGearRatio6() != null && vehicle.getGearRatio6() != 0) {
             gearsSpeeds.setGearSpeed6(calculateSpeed(
                 vehicle.getMaxRpm(),
                 vehicle.getGearRatio6(),
@@ -72,7 +72,7 @@ public class GearSpeedsService {
             ));
         }
 
-        if (vehicle.getGearRatio7() != null) {
+        if (vehicle.getGearRatio7() != null && vehicle.getGearRatio7() != 0) {
             gearsSpeeds.setGearSpeed7(calculateSpeed(
                 vehicle.getMaxRpm(),
                 vehicle.getGearRatio7(),

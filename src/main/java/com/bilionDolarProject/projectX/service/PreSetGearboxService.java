@@ -22,23 +22,27 @@ public class PreSetGearboxService {
         this.preSetGearboxRepository = preSetGearboxRepository;
     }
 
-    public  void addNewPreSetGearbox(PreSetGearbox preSetGearbox) {
+    public void addNewPreSetGearbox(PreSetGearbox preSetGearbox) {
         preSetGearboxRepository.save(preSetGearbox);
-
-
     }
 
-
     public List<PreSetGearbox> getPreSetGearbox() {
-        return preSetGearboxRepository.findAll();}
+        return preSetGearboxRepository.findAll();
+    }
 
     public PreSetGearbox findPreSetGearboxById(Long id){
         Optional<PreSetGearbox> preSetGearbox = preSetGearboxRepository.findById(id);
-    if(preSetGearbox.isPresent()){
-        return preSetGearbox.get();
-    }
-    throw new IllegalStateException("gearbox with id" + id + "does not exist");
-    }
-
+        if(preSetGearbox.isPresent()){
+            return preSetGearbox.get();
+        }
+        throw new IllegalStateException("gearbox with id" + id + "does not exist");
     }
 
+    public List<PreSetGearbox> getGearboxesByCarBrand(String carBrand) {
+        return preSetGearboxRepository.findByCarBrand(carBrand);
+    }
+
+    public List<String> getAllCarBrands() {
+        return preSetGearboxRepository.findAllCarBrands();
+    }
+}

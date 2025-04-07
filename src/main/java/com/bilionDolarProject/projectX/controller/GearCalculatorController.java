@@ -45,13 +45,29 @@ public class GearCalculatorController {
             return ResponseEntity.ok(new GearsSpeeds());
         }
         GearsSpeeds formattedSpeeds = new GearsSpeeds();
-        if (speeds.getGearSpeed1() != null && speeds.getGearSpeed1() != 0) formattedSpeeds.setGearSpeed1(Math.round(speeds.getGearSpeed1() * 100.0) / 100.0);
-        if (speeds.getGearSpeed2() != null && speeds.getGearSpeed2() != 0) formattedSpeeds.setGearSpeed2(Math.round(speeds.getGearSpeed2() * 100.0) / 100.0);
-        if (speeds.getGearSpeed3() != null && speeds.getGearSpeed3() != 0) formattedSpeeds.setGearSpeed3(Math.round(speeds.getGearSpeed3() * 100.0) / 100.0);
-        if (speeds.getGearSpeed4() != null && speeds.getGearSpeed4() != 0) formattedSpeeds.setGearSpeed4(Math.round(speeds.getGearSpeed4() * 100.0) / 100.0);
-        if (speeds.getGearSpeed5() != null && speeds.getGearSpeed5() != 0) formattedSpeeds.setGearSpeed5(Math.round(speeds.getGearSpeed5() * 100.0) / 100.0);
-        if (speeds.getGearSpeed6() != null && speeds.getGearSpeed6() != 0) formattedSpeeds.setGearSpeed6(Math.round(speeds.getGearSpeed6() * 100.0) / 100.0);
-        if (speeds.getGearSpeed7() != null && speeds.getGearSpeed7() != 0) formattedSpeeds.setGearSpeed7(Math.round(speeds.getGearSpeed7() * 100.0) / 100.0);
+        for (int i = 1; i <= 7; i++) {
+            Double speed = null;
+            switch (i) {
+                case 1: speed = speeds.getGearSpeed1(); break;
+                case 2: speed = speeds.getGearSpeed2(); break;
+                case 3: speed = speeds.getGearSpeed3(); break;
+                case 4: speed = speeds.getGearSpeed4(); break;
+                case 5: speed = speeds.getGearSpeed5(); break;
+                case 6: speed = speeds.getGearSpeed6(); break;
+                case 7: speed = speeds.getGearSpeed7(); break;
+            }
+            if (speed != null && speed != 0) {
+                switch (i) {
+                    case 1: formattedSpeeds.setGearSpeed1(Math.round(speed * 100.0) / 100.0); break;
+                    case 2: formattedSpeeds.setGearSpeed2(Math.round(speed * 100.0) / 100.0); break;
+                    case 3: formattedSpeeds.setGearSpeed3(Math.round(speed * 100.0) / 100.0); break;
+                    case 4: formattedSpeeds.setGearSpeed4(Math.round(speed * 100.0) / 100.0); break;
+                    case 5: formattedSpeeds.setGearSpeed5(Math.round(speed * 100.0) / 100.0); break;
+                    case 6: formattedSpeeds.setGearSpeed6(Math.round(speed * 100.0) / 100.0); break;
+                    case 7: formattedSpeeds.setGearSpeed7(Math.round(speed * 100.0) / 100.0); break;
+                }
+            }
+        }
         return ResponseEntity.ok(formattedSpeeds);
     }
 
@@ -67,13 +83,21 @@ public class GearCalculatorController {
             GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
             
             Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
-            if (gearsSpeeds.getGearSpeed1() != null && gearsSpeeds.getGearSpeed1() != 0) gearsSpeedsMap.put("gear1", Math.round(gearsSpeeds.getGearSpeed1() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed2() != null && gearsSpeeds.getGearSpeed2() != 0) gearsSpeedsMap.put("gear2", Math.round(gearsSpeeds.getGearSpeed2() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed3() != null && gearsSpeeds.getGearSpeed3() != 0) gearsSpeedsMap.put("gear3", Math.round(gearsSpeeds.getGearSpeed3() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed4() != null && gearsSpeeds.getGearSpeed4() != 0) gearsSpeedsMap.put("gear4", Math.round(gearsSpeeds.getGearSpeed4() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed5() != null && gearsSpeeds.getGearSpeed5() != 0) gearsSpeedsMap.put("gear5", Math.round(gearsSpeeds.getGearSpeed5() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed6() != null && gearsSpeeds.getGearSpeed6() != 0) gearsSpeedsMap.put("gear6", Math.round(gearsSpeeds.getGearSpeed6() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed7() != null && gearsSpeeds.getGearSpeed7() != 0) gearsSpeedsMap.put("gear7", Math.round(gearsSpeeds.getGearSpeed7() * 100.0) / 100.0);
+            for (int i = 1; i <= 7; i++) {
+                Double speed = null;
+                switch (i) {
+                    case 1: speed = gearsSpeeds.getGearSpeed1(); break;
+                    case 2: speed = gearsSpeeds.getGearSpeed2(); break;
+                    case 3: speed = gearsSpeeds.getGearSpeed3(); break;
+                    case 4: speed = gearsSpeeds.getGearSpeed4(); break;
+                    case 5: speed = gearsSpeeds.getGearSpeed5(); break;
+                    case 6: speed = gearsSpeeds.getGearSpeed6(); break;
+                    case 7: speed = gearsSpeeds.getGearSpeed7(); break;
+                }
+                if (speed != null && speed != 0) {
+                    gearsSpeedsMap.put("gear" + i, Math.round(speed * 100.0) / 100.0);
+                }
+            }
 
             if (!gearsSpeedsMap.isEmpty()) {
                 rpmToSpeedsMap.put(rpm, gearsSpeedsMap);

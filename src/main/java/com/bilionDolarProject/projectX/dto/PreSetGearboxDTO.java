@@ -1,12 +1,16 @@
 package com.bilionDolarProject.projectX.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.bilionDolarProject.projectX.validation.OptionalPositive;
 import lombok.Data;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PreSetGearboxDTO {
     @NotBlank(message = "Name is required")
     private String name;
@@ -15,33 +19,41 @@ public class PreSetGearboxDTO {
     private String carBrand;
 
     @NotNull(message = "Gear 1 ratio is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @Positive(message = "Gear ratio must be positive")
+    @Max(value = 7, message = "Gear ratio cannot exceed 7.0")
     private Double gear1;
 
     @NotNull(message = "Gear 2 ratio is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @Positive(message = "Gear ratio must be positive")
+    @Max(value = 7, message = "Gear ratio cannot exceed 7.0")
     private Double gear2;
 
     @NotNull(message = "Gear 3 ratio is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @Positive(message = "Gear ratio must be positive")
+    @Max(value = 7, message = "Gear ratio cannot exceed 7.0")
     private Double gear3;
 
     @NotNull(message = "Gear 4 ratio is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @Positive(message = "Gear ratio must be positive")
+    @Max(value = 7, message = "Gear ratio cannot exceed 7.0")
     private Double gear4;
 
     @NotNull(message = "Gear 5 ratio is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @Positive(message = "Gear ratio must be positive")
+    @Max(value = 7, message = "Gear ratio cannot exceed 7.0")
     private Double gear5;
 
     @NotNull(message = "Gear 6 ratio is required")
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @Positive(message = "Gear ratio must be positive")
+    @Max(value = 7, message = "Gear ratio cannot exceed 7.0")
     private Double gear6;
 
-    @Min(value = 0, message = "Gear ratio must be positive")
+    @OptionalPositive(message = "Gear ratio must not be negative")
+    @Max(value = 7, message = "Gear ratio cannot exceed 7.0")
     private Double gear7;
 
     @NotNull(message = "Final drive ratio is required")
-    @Min(value = 0, message = "Final drive ratio must be positive")
+    @Positive(message = "Final drive ratio must be positive")
+    @Max(value = 6, message = "Final drive ratio cannot exceed 6.0")
     private Double finalDrive;
 }

@@ -13,12 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -37,6 +32,31 @@ public class GearCalculatorController {
     private final GearSpeedsService gearSpeedsService;
     private final MapPreSetGearboxResponse mapPreSetGearboxResponse;
 
+    private Double getGearSpeedByIndex(GearsSpeeds speeds, int gear) {
+        switch (gear) {
+            case 1: return speeds.getGearSpeed1();
+            case 2: return speeds.getGearSpeed2();
+            case 3: return speeds.getGearSpeed3();
+            case 4: return speeds.getGearSpeed4();
+            case 5: return speeds.getGearSpeed5();
+            case 6: return speeds.getGearSpeed6();
+            case 7: return speeds.getGearSpeed7();
+            default: return null;
+        }
+    }
+
+    private void setGearSpeedByIndex(GearsSpeeds speeds, int gear, double value) {
+        switch (gear) {
+            case 1: speeds.setGearSpeed1(value); break;
+            case 2: speeds.setGearSpeed2(value); break;
+            case 3: speeds.setGearSpeed3(value); break;
+            case 4: speeds.setGearSpeed4(value); break;
+            case 5: speeds.setGearSpeed5(value); break;
+            case 6: speeds.setGearSpeed6(value); break;
+            case 7: speeds.setGearSpeed7(value); break;
+        }
+    }
+
     @Operation(summary = "Calculate speeds for maximum RPM")
     @PostMapping("/calculateSpeed")
     public ResponseEntity<GearsSpeeds> calculateSpeed(@Valid @RequestBody VehicleDTO vehicle) {
@@ -46,26 +66,9 @@ public class GearCalculatorController {
         }
         GearsSpeeds formattedSpeeds = new GearsSpeeds();
         for (int i = 1; i <= 7; i++) {
-            Double speed = null;
-            switch (i) {
-                case 1: speed = speeds.getGearSpeed1(); break;
-                case 2: speed = speeds.getGearSpeed2(); break;
-                case 3: speed = speeds.getGearSpeed3(); break;
-                case 4: speed = speeds.getGearSpeed4(); break;
-                case 5: speed = speeds.getGearSpeed5(); break;
-                case 6: speed = speeds.getGearSpeed6(); break;
-                case 7: speed = speeds.getGearSpeed7(); break;
-            }
+            Double speed = getGearSpeedByIndex(speeds, i);
             if (speed != null && speed != 0) {
-                switch (i) {
-                    case 1: formattedSpeeds.setGearSpeed1(Math.round(speed * 100.0) / 100.0); break;
-                    case 2: formattedSpeeds.setGearSpeed2(Math.round(speed * 100.0) / 100.0); break;
-                    case 3: formattedSpeeds.setGearSpeed3(Math.round(speed * 100.0) / 100.0); break;
-                    case 4: formattedSpeeds.setGearSpeed4(Math.round(speed * 100.0) / 100.0); break;
-                    case 5: formattedSpeeds.setGearSpeed5(Math.round(speed * 100.0) / 100.0); break;
-                    case 6: formattedSpeeds.setGearSpeed6(Math.round(speed * 100.0) / 100.0); break;
-                    case 7: formattedSpeeds.setGearSpeed7(Math.round(speed * 100.0) / 100.0); break;
-                }
+                setGearSpeedByIndex(formattedSpeeds, i, Math.round(speed * 100.0) / 100.0);
             }
         }
         return ResponseEntity.ok(formattedSpeeds);
@@ -84,16 +87,7 @@ public class GearCalculatorController {
             
             Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
             for (int i = 1; i <= 7; i++) {
-                Double speed = null;
-                switch (i) {
-                    case 1: speed = gearsSpeeds.getGearSpeed1(); break;
-                    case 2: speed = gearsSpeeds.getGearSpeed2(); break;
-                    case 3: speed = gearsSpeeds.getGearSpeed3(); break;
-                    case 4: speed = gearsSpeeds.getGearSpeed4(); break;
-                    case 5: speed = gearsSpeeds.getGearSpeed5(); break;
-                    case 6: speed = gearsSpeeds.getGearSpeed6(); break;
-                    case 7: speed = gearsSpeeds.getGearSpeed7(); break;
-                }
+                Double speed = getGearSpeedByIndex(gearsSpeeds, i);
                 if (speed != null && speed != 0) {
                     gearsSpeedsMap.put("gear" + i, Math.round(speed * 100.0) / 100.0);
                 }

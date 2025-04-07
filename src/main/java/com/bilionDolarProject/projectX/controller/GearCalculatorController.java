@@ -40,7 +40,7 @@ public class GearCalculatorController {
     @Operation(summary = "Calculate speeds for maximum RPM")
     @PostMapping("/calculateSpeed")
     public ResponseEntity<GearsSpeeds> calculateSpeed(@Valid @RequestBody VehicleDTO vehicle) {
-        GearsSpeeds speeds = gearSpeedsService.gearsSpeedsService(mapToVehicle(vehicle));
+        GearsSpeeds speeds = gearSpeedsService.calculateGearSpeeds(mapToVehicle(vehicle));
         if (speeds == null) {
             return ResponseEntity.ok(new GearsSpeeds());
         }
@@ -80,7 +80,7 @@ public class GearCalculatorController {
         int baseRpm = vehicle.getMaxRpm();
         for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
             vehicle.setMaxRpm(rpm);
-            GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
+            GearsSpeeds gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle);
             
             Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
             for (int i = 1; i <= 7; i++) {

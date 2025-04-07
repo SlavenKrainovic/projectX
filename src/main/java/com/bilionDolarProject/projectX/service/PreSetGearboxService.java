@@ -1,15 +1,10 @@
 package com.bilionDolarProject.projectX.service;
 
 import com.bilionDolarProject.projectX.entity.PreSetGearbox;
-import com.bilionDolarProject.projectX.entity.PreSetGearboxResponse;
 import com.bilionDolarProject.projectX.repo.PreSetGearboxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.persistence.Id;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

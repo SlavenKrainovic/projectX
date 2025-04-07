@@ -13,12 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -37,21 +32,45 @@ public class GearCalculatorController {
     private final GearSpeedsService gearSpeedsService;
     private final MapPreSetGearboxResponse mapPreSetGearboxResponse;
 
+    private Double getGearSpeedByIndex(GearsSpeeds speeds, int gear) {
+        switch (gear) {
+            case 1: return speeds.getGearSpeed1();
+            case 2: return speeds.getGearSpeed2();
+            case 3: return speeds.getGearSpeed3();
+            case 4: return speeds.getGearSpeed4();
+            case 5: return speeds.getGearSpeed5();
+            case 6: return speeds.getGearSpeed6();
+            case 7: return speeds.getGearSpeed7();
+            default: return null;
+        }
+    }
+
+    private void setGearSpeedByIndex(GearsSpeeds speeds, int gear, double value) {
+        switch (gear) {
+            case 1: speeds.setGearSpeed1(value); break;
+            case 2: speeds.setGearSpeed2(value); break;
+            case 3: speeds.setGearSpeed3(value); break;
+            case 4: speeds.setGearSpeed4(value); break;
+            case 5: speeds.setGearSpeed5(value); break;
+            case 6: speeds.setGearSpeed6(value); break;
+            case 7: speeds.setGearSpeed7(value); break;
+        }
+    }
+
     @Operation(summary = "Calculate speeds for maximum RPM")
     @PostMapping("/calculateSpeed")
     public ResponseEntity<GearsSpeeds> calculateSpeed(@Valid @RequestBody VehicleDTO vehicle) {
-        GearsSpeeds speeds = gearSpeedsService.gearsSpeedsService(mapToVehicle(vehicle));
+        GearsSpeeds speeds = gearSpeedsService.calculateGearSpeeds(mapToVehicle(vehicle));
         if (speeds == null) {
             return ResponseEntity.ok(new GearsSpeeds());
         }
         GearsSpeeds formattedSpeeds = new GearsSpeeds();
-        if (speeds.getGearSpeed1() != null && speeds.getGearSpeed1() != 0) formattedSpeeds.setGearSpeed1(Math.round(speeds.getGearSpeed1() * 100.0) / 100.0);
-        if (speeds.getGearSpeed2() != null && speeds.getGearSpeed2() != 0) formattedSpeeds.setGearSpeed2(Math.round(speeds.getGearSpeed2() * 100.0) / 100.0);
-        if (speeds.getGearSpeed3() != null && speeds.getGearSpeed3() != 0) formattedSpeeds.setGearSpeed3(Math.round(speeds.getGearSpeed3() * 100.0) / 100.0);
-        if (speeds.getGearSpeed4() != null && speeds.getGearSpeed4() != 0) formattedSpeeds.setGearSpeed4(Math.round(speeds.getGearSpeed4() * 100.0) / 100.0);
-        if (speeds.getGearSpeed5() != null && speeds.getGearSpeed5() != 0) formattedSpeeds.setGearSpeed5(Math.round(speeds.getGearSpeed5() * 100.0) / 100.0);
-        if (speeds.getGearSpeed6() != null && speeds.getGearSpeed6() != 0) formattedSpeeds.setGearSpeed6(Math.round(speeds.getGearSpeed6() * 100.0) / 100.0);
-        if (speeds.getGearSpeed7() != null && speeds.getGearSpeed7() != 0) formattedSpeeds.setGearSpeed7(Math.round(speeds.getGearSpeed7() * 100.0) / 100.0);
+        for (int i = 1; i <= 7; i++) {
+            Double speed = getGearSpeedByIndex(speeds, i);
+            if (speed != null && speed != 0) {
+                setGearSpeedByIndex(formattedSpeeds, i, Math.round(speed * 100.0) / 100.0);
+            }
+        }
         return ResponseEntity.ok(formattedSpeeds);
     }
 
@@ -64,16 +83,15 @@ public class GearCalculatorController {
         int baseRpm = vehicle.getMaxRpm();
         for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
             vehicle.setMaxRpm(rpm);
-            GearsSpeeds gearsSpeeds = gearSpeedsService.gearsSpeedsService(vehicle);
+            GearsSpeeds gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle);
             
             Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
-            if (gearsSpeeds.getGearSpeed1() != null && gearsSpeeds.getGearSpeed1() != 0) gearsSpeedsMap.put("gear1", Math.round(gearsSpeeds.getGearSpeed1() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed2() != null && gearsSpeeds.getGearSpeed2() != 0) gearsSpeedsMap.put("gear2", Math.round(gearsSpeeds.getGearSpeed2() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed3() != null && gearsSpeeds.getGearSpeed3() != 0) gearsSpeedsMap.put("gear3", Math.round(gearsSpeeds.getGearSpeed3() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed4() != null && gearsSpeeds.getGearSpeed4() != 0) gearsSpeedsMap.put("gear4", Math.round(gearsSpeeds.getGearSpeed4() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed5() != null && gearsSpeeds.getGearSpeed5() != 0) gearsSpeedsMap.put("gear5", Math.round(gearsSpeeds.getGearSpeed5() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed6() != null && gearsSpeeds.getGearSpeed6() != 0) gearsSpeedsMap.put("gear6", Math.round(gearsSpeeds.getGearSpeed6() * 100.0) / 100.0);
-            if (gearsSpeeds.getGearSpeed7() != null && gearsSpeeds.getGearSpeed7() != 0) gearsSpeedsMap.put("gear7", Math.round(gearsSpeeds.getGearSpeed7() * 100.0) / 100.0);
+            for (int i = 1; i <= 7; i++) {
+                Double speed = getGearSpeedByIndex(gearsSpeeds, i);
+                if (speed != null && speed != 0) {
+                    gearsSpeedsMap.put("gear" + i, Math.round(speed * 100.0) / 100.0);
+                }
+            }
 
             if (!gearsSpeedsMap.isEmpty()) {
                 rpmToSpeedsMap.put(rpm, gearsSpeedsMap);

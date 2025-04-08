@@ -33,28 +33,11 @@ public class GearCalculatorController {
     private final MapPreSetGearboxResponse mapPreSetGearboxResponse;
 
     private Double getGearSpeedByIndex(GearsSpeeds speeds, int gear) {
-        switch (gear) {
-            case 1: return speeds.getGearSpeed1();
-            case 2: return speeds.getGearSpeed2();
-            case 3: return speeds.getGearSpeed3();
-            case 4: return speeds.getGearSpeed4();
-            case 5: return speeds.getGearSpeed5();
-            case 6: return speeds.getGearSpeed6();
-            case 7: return speeds.getGearSpeed7();
-            default: return null;
-        }
+        return speeds.getGearSpeeds().getOrDefault(gear, null);
     }
 
     private void setGearSpeedByIndex(GearsSpeeds speeds, int gear, double value) {
-        switch (gear) {
-            case 1: speeds.setGearSpeed1(value); break;
-            case 2: speeds.setGearSpeed2(value); break;
-            case 3: speeds.setGearSpeed3(value); break;
-            case 4: speeds.setGearSpeed4(value); break;
-            case 5: speeds.setGearSpeed5(value); break;
-            case 6: speeds.setGearSpeed6(value); break;
-            case 7: speeds.setGearSpeed7(value); break;
-        }
+        speeds.setGearSpeed(gear, Math.round(value * 100.0) / 100.0);
     }
 
     @Operation(summary = "Calculate speeds for maximum RPM")
@@ -68,7 +51,7 @@ public class GearCalculatorController {
         for (int i = 1; i <= 7; i++) {
             Double speed = getGearSpeedByIndex(speeds, i);
             if (speed != null && speed != 0) {
-                setGearSpeedByIndex(formattedSpeeds, i, Math.round(speed * 100.0) / 100.0);
+                setGearSpeedByIndex(formattedSpeeds, i, speed);
             }
         }
         return ResponseEntity.ok(formattedSpeeds);

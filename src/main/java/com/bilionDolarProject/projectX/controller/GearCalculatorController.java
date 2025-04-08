@@ -64,7 +64,7 @@ public class GearCalculatorController {
         Map<Integer, Map<String, Double>> rpmToSpeedsMap = new TreeMap<>();
         
         int baseRpm = vehicle.getMaxRpm();
-        for (int rpm = 50; rpm <= baseRpm; rpm += 50) {
+        for (int rpm = 5; rpm <= baseRpm; rpm += 5) {
             vehicle.setMaxRpm(rpm);
             GearsSpeeds gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle);
             

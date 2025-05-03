@@ -4,18 +4,22 @@ import com.bilionDolarProject.projectX.entity.Vehicle;
 import com.bilionDolarProject.projectX.entity.Gearbox;
 import com.bilionDolarProject.projectX.entity.WheelSize;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MapVehicle {
     public Gearbox gearbox(Vehicle vehicle) {
         Gearbox gearbox = new Gearbox();
-        gearbox.setGear1(vehicle.getGearRatio1());
-        gearbox.setGear2(vehicle.getGearRatio2());
-        gearbox.setGear3(vehicle.getGearRatio3());
-        gearbox.setGear4(vehicle.getGearRatio4());
-        gearbox.setGear5(vehicle.getGearRatio5());
-        gearbox.setGear6(vehicle.getGearRatio6());
-        gearbox.setGear7(vehicle.getGearRatio7());
+        List<Double> gearRatios = new ArrayList<>();
+        gearRatios.add(vehicle.getGearRatio1());
+        gearRatios.add(vehicle.getGearRatio2());
+        gearRatios.add(vehicle.getGearRatio3());
+        gearRatios.add(vehicle.getGearRatio4());
+        gearRatios.add(vehicle.getGearRatio5());
+        gearRatios.add(vehicle.getGearRatio6());
+        gearRatios.add(vehicle.getGearRatio7());
+        gearbox.setGears(gearRatios);
         gearbox.setFinalDrive(vehicle.getFinalDrive());
         return gearbox;
     }

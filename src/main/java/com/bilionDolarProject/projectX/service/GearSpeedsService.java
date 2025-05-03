@@ -22,70 +22,33 @@ public class GearSpeedsService {
         );
 
         // Calculate speeds for each gear if present and not zero
-        if (isNonZero(vehicle.getGearRatio1())) {
-            gearsSpeeds.setGearSpeed1(calculateSpeed(
-                vehicle.getMaxRpm(),
-                vehicle.getGearRatio1(),
-                vehicle.getFinalDrive(),
-                wheelCircumference
-            ));
-        }
-
-        if (isNonZero(vehicle.getGearRatio2())) {
-            gearsSpeeds.setGearSpeed2(calculateSpeed(
-                vehicle.getMaxRpm(),
-                vehicle.getGearRatio2(),
-                vehicle.getFinalDrive(),
-                wheelCircumference
-            ));
-        }
-
-        if (isNonZero(vehicle.getGearRatio3())) {
-            gearsSpeeds.setGearSpeed3(calculateSpeed(
-                vehicle.getMaxRpm(),
-                vehicle.getGearRatio3(),
-                vehicle.getFinalDrive(),
-                wheelCircumference
-            ));
-        }
-
-        if (isNonZero(vehicle.getGearRatio4())) {
-            gearsSpeeds.setGearSpeed4(calculateSpeed(
-                vehicle.getMaxRpm(),
-                vehicle.getGearRatio4(),
-                vehicle.getFinalDrive(),
-                wheelCircumference
-            ));
-        }
-
-        if (isNonZero(vehicle.getGearRatio5())) {
-            gearsSpeeds.setGearSpeed5(calculateSpeed(
-                vehicle.getMaxRpm(),
-                vehicle.getGearRatio5(),
-                vehicle.getFinalDrive(),
-                wheelCircumference
-            ));
-        }
-
-        if (isNonZero(vehicle.getGearRatio6())) {
-            gearsSpeeds.setGearSpeed6(calculateSpeed(
-                vehicle.getMaxRpm(),
-                vehicle.getGearRatio6(),
-                vehicle.getFinalDrive(),
-                wheelCircumference
-            ));
-        }
-
-        if (isNonZero(vehicle.getGearRatio7())) {
-            gearsSpeeds.setGearSpeed7(calculateSpeed(
-                vehicle.getMaxRpm(),
-                vehicle.getGearRatio7(),
-                vehicle.getFinalDrive(),
-                wheelCircumference
-            ));
+        for (int i = 1; i <= 7; i++) {
+            Double gearRatio = getGearRatioByIndex(vehicle, i);
+            if (isNonZero(gearRatio)) {
+                double speed = calculateSpeed(
+                    vehicle.getMaxRpm(),
+                    gearRatio,
+                    vehicle.getFinalDrive(),
+                    wheelCircumference
+                );
+                gearsSpeeds.setGearSpeed(i, speed);
+            }
         }
 
         return gearsSpeeds;
+    }
+
+    private Double getGearRatioByIndex(Vehicle vehicle, int index) {
+        switch (index) {
+            case 1: return vehicle.getGearRatio1();
+            case 2: return vehicle.getGearRatio2();
+            case 3: return vehicle.getGearRatio3();
+            case 4: return vehicle.getGearRatio4();
+            case 5: return vehicle.getGearRatio5();
+            case 6: return vehicle.getGearRatio6();
+            case 7: return vehicle.getGearRatio7();
+            default: return null;
+        }
     }
 
     private double calculateSpeed(int rpm, double gearRatio, double finalDrive, double wheelCircumference) {

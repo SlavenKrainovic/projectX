@@ -1,5 +1,6 @@
 package com.bilionDolarProject.projectX.entity;
 
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -10,12 +11,6 @@ import lombok.Data;
 @Data
 public class Gearbox {
 
-    private Double gear1;
-    private Double gear2;
-    private Double gear3;
-    private Double gear4;
-    private Double gear5;
-    private Double gear6;
-    private Double gear7;
+    private List<Double> gears;
     private Double finalDrive;
 }

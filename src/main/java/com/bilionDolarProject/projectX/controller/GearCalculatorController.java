@@ -40,23 +40,6 @@ public class GearCalculatorController {
         speeds.setGearSpeed(gear, Math.round(value * 100.0) / 100.0);
     }
 
-    @Operation(summary = "Calculate speeds for maximum RPM")
-    @PostMapping("/calculateSpeed")
-    public ResponseEntity<GearsSpeeds> calculateSpeed(@Valid @RequestBody VehicleDTO vehicle) {
-        GearsSpeeds speeds = gearSpeedsService.calculateGearSpeeds(mapToVehicle(vehicle));
-        if (speeds == null) {
-            return ResponseEntity.ok(new GearsSpeeds());
-        }
-        GearsSpeeds formattedSpeeds = new GearsSpeeds();
-        for (int i = 1; i <= 7; i++) {
-            Double speed = getGearSpeedByIndex(speeds, i);
-            if (speed != null && speed != 0) {
-                setGearSpeedByIndex(formattedSpeeds, i, speed);
-            }
-        }
-        return ResponseEntity.ok(formattedSpeeds);
-    }
-
     @Operation(summary = "Calculate speeds for RPM range")
     @PostMapping("/calculateSpeeds")
     public ResponseEntity<Map<Integer, Map<String, Double>>> calculateSpeeds(@Valid @RequestBody VehicleDTO vehicleDTO) {

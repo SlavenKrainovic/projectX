@@ -101,7 +101,15 @@ public class GearCalculatorController {
     @GetMapping("/getById/{id}")
     public ResponseEntity<PreSetGearboxResponse> getPreSetGearbox(@PathVariable Long id) {
         PreSetGearbox gearbox = preSetGearboxService.findPreSetGearboxById(id);
-        return ResponseEntity.ok(mapPreSetGearboxResponse.preSetGearboxResponse(gearbox));
+        Vehicle vehicle = mapToVehicle(gearbox);
+        GearsSpeeds speeds = gearSpeedsService.calculateGearSpeeds(
+            vehicle,
+            gearbox.getFinalDrivePattern(),
+            gearbox.getFinalDrive2()
+        );
+        PreSetGearboxResponse response = mapPreSetGearboxResponse.preSetGearboxResponse(gearbox);
+        // Optionally, you can attach speeds to response if needed
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get all gearbox presets with detailed information")
@@ -134,6 +142,24 @@ public class GearCalculatorController {
         return vehicle;
     }
 
+    private Vehicle mapToVehicle(PreSetGearbox gearbox) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setGearRatio1(gearbox.getGear1());
+        vehicle.setGearRatio2(gearbox.getGear2());
+        vehicle.setGearRatio3(gearbox.getGear3());
+        vehicle.setGearRatio4(gearbox.getGear4());
+        vehicle.setGearRatio5(gearbox.getGear5());
+        vehicle.setGearRatio6(gearbox.getGear6());
+        vehicle.setGearRatio7(gearbox.getGear7());
+        vehicle.setFinalDrive(gearbox.getFinalDrive());
+        // Set default values to prevent NPE
+        vehicle.setTyreWidth(205);
+        vehicle.setTyreProfile(55);
+        vehicle.setWheelDiameter(16);
+        vehicle.setMaxRpm(7000);
+        return vehicle;
+    }
+
     private PreSetGearbox mapToPreSetGearbox(PreSetGearboxDTO dto) {
         return new PreSetGearbox(
             dto.getName(),
@@ -146,7 +172,8 @@ public class GearCalculatorController {
             dto.getGear7(),
             dto.getFinalDrive(),
             dto.getFinalDrive2(),
-            dto.getCarBrand()
+            dto.getCarBrand(),
+            dto.getFinalDrivePattern()
         );
     }
 }

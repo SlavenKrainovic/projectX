@@ -59,11 +59,21 @@ public class PreSetGearboxDTO {
 
     private Double finalDrive2;
 
+    private String finalDrivePattern;
+
     public Double getFinalDrive2() {
         return finalDrive2;
     }
 
     public void setFinalDrive2(Double finalDrive2) {
         this.finalDrive2 = finalDrive2;
+    }
+
+    public String getFinalDrivePattern() {
+        return finalDrivePattern;
+    }
+
+    public void setFinalDrivePattern(String finalDrivePattern) {
+        this.finalDrivePattern = finalDrivePattern;
     }
 }

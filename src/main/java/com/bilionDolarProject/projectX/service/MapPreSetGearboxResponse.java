@@ -48,7 +48,8 @@ public class MapPreSetGearboxResponse {
                 preSetGearbox.getName(),
                 preSetGearbox.getFinalDrive(),
                 preSetGearbox.getFinalDrive2(),
-                gears
+                gears,
+                preSetGearbox.getFinalDrivePattern()
             );
             return preSetGearboxResponse;
         }

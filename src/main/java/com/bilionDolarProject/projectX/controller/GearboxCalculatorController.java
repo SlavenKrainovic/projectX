@@ -84,7 +84,8 @@ public class GearboxCalculatorController {
             dto.getGear7(),
             dto.getFinalDrive(),
             dto.getFinalDrive2(),
-            dto.getCarBrand()
+            dto.getCarBrand(),
+            dto.getFinalDrivePattern()
         );
     }
 }

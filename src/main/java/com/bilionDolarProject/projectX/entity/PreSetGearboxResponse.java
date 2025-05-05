@@ -8,6 +8,7 @@ public class PreSetGearboxResponse {
  private String name;
  private double finalDrive;
  private Double finalDrive2;
+ private String finalDrivePattern;
  private ArrayList<SubObjectGearbox> gears = new ArrayList<SubObjectGearbox>();
 
  public PreSetGearboxResponse(){}
@@ -25,6 +26,15 @@ public class PreSetGearboxResponse {
   this.finalDrive = finalDrive;
   this.finalDrive2 = finalDrive2;
   this.gears = gears;
+ }
+
+ public PreSetGearboxResponse(String carBrand, String name, double finalDrive, Double finalDrive2, ArrayList<SubObjectGearbox> gears, String finalDrivePattern) {
+  this.carBrand = carBrand;
+  this.name = name;
+  this.finalDrive = finalDrive;
+  this.finalDrive2 = finalDrive2;
+  this.gears = gears;
+  this.finalDrivePattern = finalDrivePattern;
  }
 
  public String getCarBrand() {
@@ -57,6 +67,14 @@ public class PreSetGearboxResponse {
 
  public void setFinalDrive2(Double finalDrive2) {
   this.finalDrive2 = finalDrive2;
+ }
+
+ public String getFinalDrivePattern() {
+  return finalDrivePattern;
+ }
+
+ public void setFinalDrivePattern(String finalDrivePattern) {
+  this.finalDrivePattern = finalDrivePattern;
  }
 
  public ArrayList<SubObjectGearbox> getgears() {

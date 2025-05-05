@@ -64,9 +64,16 @@ public class GearCalculatorController {
         Map<Integer, Map<String, Double>> rpmToSpeedsMap = new TreeMap<>();
         
         int baseRpm = vehicle.getMaxRpm();
+        String finalDrivePattern = vehicleDTO.getFinalDrivePattern();
+        Double finalDrive2 = vehicleDTO.getFinalDrive2();
         for (int rpm = 5; rpm <= baseRpm; rpm += 5) {
             vehicle.setMaxRpm(rpm);
-            GearsSpeeds gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle);
+            GearsSpeeds gearsSpeeds;
+            if (finalDrivePattern != null || finalDrive2 != null) {
+                gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle, finalDrivePattern, finalDrive2);
+            } else {
+                gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle);
+            }
             
             Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
             for (int i = 1; i <= 7; i++) {

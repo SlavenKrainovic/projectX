@@ -1,4 +1,4 @@
-package com.bilionDolarProject.projectX.config;
+package com.bilionDolarProject.projectX.Config;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

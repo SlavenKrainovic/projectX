@@ -1,4 +1,4 @@
-package com.bilionDolarProject.projectX.config;
+package com.bilionDolarProject.projectX.Config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;

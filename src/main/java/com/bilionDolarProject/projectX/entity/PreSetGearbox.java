@@ -44,13 +44,15 @@ public class PreSetGearbox {
     private double gear7;
     @Column (name = "finalDrive")
     private double finalDrive;
+    @Column (name = "FINAL_DRIVE_2")
+    private Double finalDrive2;
     @Column (name = "carBrand", columnDefinition = "TEXT"
     )
     private String carBrand;
 
     public PreSetGearbox(){}
 
-    public PreSetGearbox( String name, double gear1, double gear2, double gear3, double gear4, double gear5, double gear6, double gear7, double finalDrive, String carBrand) {
+    public PreSetGearbox( String name, double gear1, double gear2, double gear3, double gear4, double gear5, double gear6, double gear7, double finalDrive, Double finalDrive2, String carBrand) {
 
         this.name = name;
         this.gear1 = gear1;
@@ -61,6 +63,7 @@ public class PreSetGearbox {
         this.gear6 = gear6;
         this.gear7 = gear7;
         this.finalDrive = finalDrive;
+        this.finalDrive2 = finalDrive2;
         this.carBrand = carBrand;
     }
 
@@ -152,6 +155,14 @@ public class PreSetGearbox {
         this.finalDrive = finalDrive;
     }
 
+    public Double getFinalDrive2() {
+        return finalDrive2;
+    }
+
+    public void setFinalDrive2(Double finalDrive2) {
+        this.finalDrive2 = finalDrive2;
+    }
+
     @Override
     public String toString() {
         return "PreSetGearbox{" +
@@ -165,6 +176,7 @@ public class PreSetGearbox {
                 ", gear6=" + gear6 +
                 ", gear7=" + gear7 +
                 ", finalDrive=" + finalDrive +
+                ", finalDrive2=" + finalDrive2 +
                 ", carBrand='" + carBrand + '\'' +
                 '}';
     }

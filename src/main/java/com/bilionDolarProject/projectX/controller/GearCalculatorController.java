@@ -145,6 +145,7 @@ public class GearCalculatorController {
             dto.getGear6(),
             dto.getGear7(),
             dto.getFinalDrive(),
+            dto.getFinalDrive2(),
             dto.getCarBrand()
         );
     }

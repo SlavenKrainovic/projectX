@@ -40,23 +40,6 @@ public class GearCalculatorController {
         speeds.setGearSpeed(gear, Math.round(value * 100.0) / 100.0);
     }
 
-    @Operation(summary = "Calculate speeds for maximum RPM")
-    @PostMapping("/calculateSpeed")
-    public ResponseEntity<GearsSpeeds> calculateSpeed(@Valid @RequestBody VehicleDTO vehicle) {
-        GearsSpeeds speeds = gearSpeedsService.calculateGearSpeeds(mapToVehicle(vehicle));
-        if (speeds == null) {
-            return ResponseEntity.ok(new GearsSpeeds());
-        }
-        GearsSpeeds formattedSpeeds = new GearsSpeeds();
-        for (int i = 1; i <= 7; i++) {
-            Double speed = getGearSpeedByIndex(speeds, i);
-            if (speed != null && speed != 0) {
-                setGearSpeedByIndex(formattedSpeeds, i, speed);
-            }
-        }
-        return ResponseEntity.ok(formattedSpeeds);
-    }
-
     @Operation(summary = "Calculate speeds for RPM range")
     @PostMapping("/calculateSpeeds")
     public ResponseEntity<Map<Integer, Map<String, Double>>> calculateSpeeds(@Valid @RequestBody VehicleDTO vehicleDTO) {
@@ -64,9 +47,16 @@ public class GearCalculatorController {
         Map<Integer, Map<String, Double>> rpmToSpeedsMap = new TreeMap<>();
         
         int baseRpm = vehicle.getMaxRpm();
+        String finalDrivePattern = vehicleDTO.getFinalDrivePattern();
+        Double finalDrive2 = vehicleDTO.getFinalDrive2();
         for (int rpm = 5; rpm <= baseRpm; rpm += 5) {
             vehicle.setMaxRpm(rpm);
-            GearsSpeeds gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle);
+            GearsSpeeds gearsSpeeds;
+            if (finalDrivePattern != null || finalDrive2 != null) {
+                gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle, finalDrivePattern, finalDrive2);
+            } else {
+                gearsSpeeds = gearSpeedsService.calculateGearSpeeds(vehicle);
+            }
             
             Map<String, Double> gearsSpeedsMap = new LinkedHashMap<>();
             for (int i = 1; i <= 7; i++) {
@@ -101,7 +91,15 @@ public class GearCalculatorController {
     @GetMapping("/getById/{id}")
     public ResponseEntity<PreSetGearboxResponse> getPreSetGearbox(@PathVariable Long id) {
         PreSetGearbox gearbox = preSetGearboxService.findPreSetGearboxById(id);
-        return ResponseEntity.ok(mapPreSetGearboxResponse.preSetGearboxResponse(gearbox));
+        Vehicle vehicle = mapToVehicle(gearbox);
+        GearsSpeeds speeds = gearSpeedsService.calculateGearSpeeds(
+            vehicle,
+            gearbox.getFinalDrivePattern(),
+            gearbox.getFinalDrive2()
+        );
+        PreSetGearboxResponse response = mapPreSetGearboxResponse.preSetGearboxResponse(gearbox);
+        // Optionally, you can attach speeds to response if needed
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get all gearbox presets with detailed information")
@@ -134,6 +132,24 @@ public class GearCalculatorController {
         return vehicle;
     }
 
+    private Vehicle mapToVehicle(PreSetGearbox gearbox) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setGearRatio1(gearbox.getGear1());
+        vehicle.setGearRatio2(gearbox.getGear2());
+        vehicle.setGearRatio3(gearbox.getGear3());
+        vehicle.setGearRatio4(gearbox.getGear4());
+        vehicle.setGearRatio5(gearbox.getGear5());
+        vehicle.setGearRatio6(gearbox.getGear6());
+        vehicle.setGearRatio7(gearbox.getGear7());
+        vehicle.setFinalDrive(gearbox.getFinalDrive());
+        // Set default values to prevent NPE
+        vehicle.setTyreWidth(205);
+        vehicle.setTyreProfile(55);
+        vehicle.setWheelDiameter(16);
+        vehicle.setMaxRpm(7000);
+        return vehicle;
+    }
+
     private PreSetGearbox mapToPreSetGearbox(PreSetGearboxDTO dto) {
         return new PreSetGearbox(
             dto.getName(),
@@ -145,7 +161,9 @@ public class GearCalculatorController {
             dto.getGear6(),
             dto.getGear7(),
             dto.getFinalDrive(),
-            dto.getCarBrand()
+            dto.getFinalDrive2(),
+            dto.getCarBrand(),
+            dto.getFinalDrivePattern()
         );
     }
 }

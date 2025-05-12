@@ -38,6 +38,31 @@ public class GearSpeedsService {
         return gearsSpeeds;
     }
 
+    public GearsSpeeds calculateGearSpeeds(Vehicle vehicle, String finalDrivePattern, Double finalDrive2) {
+        GearsSpeeds gearsSpeeds = new GearsSpeeds();
+        double wheelCircumference = calculateWheelCircumference(
+            vehicle.getTyreWidth(),
+            vehicle.getTyreProfile(),
+            vehicle.getWheelDiameter()
+        );
+        String[] pattern = finalDrivePattern != null ? finalDrivePattern.split(",") : null;
+        int gearCount = 7; // update if more gears
+        for (int i = 1; i <= gearCount; i++) {
+            Double gearRatio = getGearRatioByIndex(vehicle, i);
+            if (isNonZero(gearRatio)) {
+                double drive = vehicle.getFinalDrive();
+                if (pattern != null && pattern.length >= i && finalDrive2 != null) {
+                    if ("2".equals(pattern[i-1])) {
+                        drive = finalDrive2;
+                    }
+                }
+                double speed = calculateSpeed(vehicle.getMaxRpm(), gearRatio, drive, wheelCircumference);
+                gearsSpeeds.getGearSpeeds().put(i, speed);
+            }
+        }
+        return gearsSpeeds;
+    }
+
     private Double getGearRatioByIndex(Vehicle vehicle, int index) {
         switch (index) {
             case 1: return vehicle.getGearRatio1();

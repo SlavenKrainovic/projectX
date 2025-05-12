@@ -56,4 +56,24 @@ public class PreSetGearboxDTO {
     @Positive(message = "Final drive ratio must be positive")
     @Max(value = 6, message = "Final drive ratio cannot exceed 6.0")
     private Double finalDrive;
+
+    private Double finalDrive2;
+
+    private String finalDrivePattern;
+
+    public Double getFinalDrive2() {
+        return finalDrive2;
+    }
+
+    public void setFinalDrive2(Double finalDrive2) {
+        this.finalDrive2 = finalDrive2;
+    }
+
+    public String getFinalDrivePattern() {
+        return finalDrivePattern;
+    }
+
+    public void setFinalDrivePattern(String finalDrivePattern) {
+        this.finalDrivePattern = finalDrivePattern;
+    }
 }

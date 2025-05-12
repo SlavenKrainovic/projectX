@@ -43,7 +43,14 @@ public class MapPreSetGearboxResponse {
             gears.add(subObjectGearbox6);
             gears.add(subObjectGearbox7);
 
-            PreSetGearboxResponse preSetGearboxResponse = new PreSetGearboxResponse(preSetGearbox.getCarBrand(), preSetGearbox.getName(), preSetGearbox.getFinalDrive(), gears);
+            PreSetGearboxResponse preSetGearboxResponse = new PreSetGearboxResponse(
+                preSetGearbox.getCarBrand(),
+                preSetGearbox.getName(),
+                preSetGearbox.getFinalDrive(),
+                preSetGearbox.getFinalDrive2(),
+                gears,
+                preSetGearbox.getFinalDrivePattern()
+            );
             return preSetGearboxResponse;
         }
 }

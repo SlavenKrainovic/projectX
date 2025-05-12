@@ -43,6 +43,9 @@ public class VehicleDTO {
     @Positive(message = "Final drive ratio must be positive")
     private Double finalDrive;
 
+    private String finalDrivePattern;
+    private Double finalDrive2;
+
     @NotNull(message = "Tyre width is required")
     @Min(value = 135, message = "Tyre width must be at least 135")
     @Max(value = 405, message = "Tyre width cannot exceed 405")
@@ -57,4 +60,17 @@ public class VehicleDTO {
     @Min(value = 13, message = "Wheel diameter must be at least 13")
     @Max(value = 24, message = "Wheel diameter cannot exceed 24")
     private Integer wheelDiameter;
+
+    public String getFinalDrivePattern() {
+        return finalDrivePattern;
+    }
+    public void setFinalDrivePattern(String finalDrivePattern) {
+        this.finalDrivePattern = finalDrivePattern;
+    }
+    public Double getFinalDrive2() {
+        return finalDrive2;
+    }
+    public void setFinalDrive2(Double finalDrive2) {
+        this.finalDrive2 = finalDrive2;
+    }
 }
